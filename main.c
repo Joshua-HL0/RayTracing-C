@@ -14,9 +14,8 @@ int main(){
     Circle circle = {200, 200, 50};
     Ray rays[RAY_COUNT];
 
-    draw_circle(&circle);
     init_rays(rays, circle);
-    calculate_rays(rays, circle);
+    render_all(rays, circle);
 
     bool Running = true;
     SDL_Event event;
@@ -27,7 +26,7 @@ int main(){
         
         
         render_all(rays, circle);
-        SDL_Delay(30);
+        SDL_Delay(10);
     }
 
     SDL_DestroyRenderer(renderer);
@@ -89,8 +88,8 @@ void calculate_rays(Ray rays[RAY_COUNT], Circle object){
             x += step * cos(bearingRadians);
             y += step * sin(bearingRadians);
             
-            if (x < 0 || x > WINDOW_WIDTH) boundaryCollision = true;
-            if (y < 0 || y > WINDOW_HEIGHT) boundaryCollision = true; 
+            if (x <= 0 || x >= WINDOW_WIDTH) boundaryCollision = true;
+            if (y <= 0 || y >= WINDOW_HEIGHT) boundaryCollision = true; 
 
             double distanceSquared = (pow(x-object.x, 2)) + (pow(y-object.y, 2));
             if (distanceSquared < radiusSquared) break;
@@ -105,7 +104,7 @@ void init_rays(Ray rays[RAY_COUNT], Circle object){
     for (int i = 0; i < RAY_COUNT; i++){
         rays[i].x = object.x;
         rays[i].y = object.y;
-        rays[i].bearing = ((double)360 / (double)RAY_COUNT) * (double)i;
+        rays[i].bearing = (i * 360.0) / RAY_COUNT;
     }
 }
 

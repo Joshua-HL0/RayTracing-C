@@ -12,7 +12,7 @@
 #define COLOUR_YELLOW 0xff, 0xff, 0x00, 0xff
 
 #define COLOUR_RAY COLOUR_YELLOW
-#define RAY_COUNT 1000
+#define RAY_COUNT 250
 #define RAY_WIDTH 2
 
 typedef struct {
@@ -22,8 +22,8 @@ typedef struct {
 } Circle;
 
 typedef struct {
-    int x;
-    int y;
+    double x;
+    double y;
     double bearing;
 } Ray;
 
