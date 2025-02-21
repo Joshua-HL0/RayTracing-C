@@ -12,7 +12,7 @@
 #define COLOUR_YELLOW 0xff, 0xff, 0x00, 0xff
 
 #define COLOUR_RAY COLOUR_YELLOW
-#define RAY_COUNT 300
+#define RAY_COUNT 1000
 #define RAY_WIDTH 2
 
 typedef struct {
@@ -24,15 +24,16 @@ typedef struct {
 typedef struct {
     int x;
     int y;
-    int bearing;
+    double bearing;
 } Ray;
 
 
 SDL_Renderer *renderer;
 
 void draw_circle(Circle *circle);
-void draw_rays();
+void draw_rays(Ray rays[RAY_COUNT], Circle object);
 void calculate_rays(Ray rays[RAY_COUNT], Circle object);
 void render_all(Ray rays[RAY_COUNT], Circle circle);
+void init_rays(Ray rays[RAY_COUNT], Circle object);
 
 #endif

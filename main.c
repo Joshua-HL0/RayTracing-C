@@ -15,6 +15,7 @@ int main(){
     Ray rays[RAY_COUNT];
 
     draw_circle(&circle);
+    init_rays(rays, circle);
     calculate_rays(rays, circle);
 
     bool Running = true;
@@ -44,6 +45,7 @@ void render_all(Ray rays[RAY_COUNT], Circle circle){
 
     SDL_SetRenderDrawColor(renderer, COLOUR_RAY);
     calculate_rays(rays, circle);
+    draw_rays(rays, circle);
 
     SDL_RenderPresent(renderer);
 }
@@ -69,25 +71,23 @@ void draw_circle(Circle *circle){
     }
 }
 
+
 void calculate_rays(Ray rays[RAY_COUNT], Circle object){
     int radiusSquared = object.radius * object.radius;
     
     for (int i = 0; i < RAY_COUNT; i++){
-        Ray ray = rays[i];
         
         bool boundaryCollision = false;
         bool objectCollision = false;
 
         double step = 1;
-        double x = ray.x;
-        double y = ray.y;
+        double x = rays[i].x;
+        double y = rays[i].y;
+        double bearingRadians = rays[i].bearing * (M_PI / 180.0);
 
         while (!boundaryCollision && !objectCollision){
-
-            x += step * cos(ray.bearing);
-            y += step * sin(ray.bearing);
-            SDL_Rect rect = (SDL_Rect){x, y, RAY_WIDTH, RAY_WIDTH};
-            SDL_RenderFillRect(renderer, &rect);
+            x += step * cos(bearingRadians);
+            y += step * sin(bearingRadians);
             
             if (x < 0 || x > WINDOW_WIDTH) boundaryCollision = true;
             if (y < 0 || y > WINDOW_HEIGHT) boundaryCollision = true; 
@@ -95,5 +95,23 @@ void calculate_rays(Ray rays[RAY_COUNT], Circle object){
             double distanceSquared = (pow(x-object.x, 2)) + (pow(y-object.y, 2));
             if (distanceSquared < radiusSquared) break;
         }
+
+        rays[i].x = x;
+        rays[i].y = y;
+    }
+}
+
+void init_rays(Ray rays[RAY_COUNT], Circle object){
+    for (int i = 0; i < RAY_COUNT; i++){
+        rays[i].x = object.x;
+        rays[i].y = object.y;
+        rays[i].bearing = ((double)360 / (double)RAY_COUNT) * (double)i;
+    }
+}
+
+void draw_rays(Ray rays[RAY_COUNT], Circle object){
+    SDL_SetRenderDrawColor(renderer, COLOUR_RAY);
+    for (int i = 0; i < RAY_COUNT; i++){
+        SDL_RenderDrawLine(renderer, object.x, object.y, rays[i].x, rays[i].y);
     }
 }
