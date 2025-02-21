@@ -12,7 +12,8 @@
 #define COLOUR_YELLOW 0xff, 0xff, 0x00, 0xff
 
 #define COLOUR_RAY COLOUR_YELLOW
-
+#define RAY_COUNT 300
+#define RAY_WIDTH 2
 
 typedef struct {
     int x;
@@ -31,6 +32,7 @@ SDL_Renderer *renderer;
 
 void draw_circle(Circle *circle);
 void draw_rays();
-void calculate_rays();
+void calculate_rays(Ray rays[RAY_COUNT], Circle object);
+void render_all(Ray rays[RAY_COUNT], Circle circle);
 
 #endif
